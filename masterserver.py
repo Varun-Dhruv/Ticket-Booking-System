@@ -143,7 +143,7 @@ def initiateClockServer(port=8080):
 
 
 # Driver function
-if _name_ == '_main_':
+if __name__ == '__main__':
 
     # Trigger the Clock Server
     initiateClockServer(port=8080)

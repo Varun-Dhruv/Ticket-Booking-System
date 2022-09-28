@@ -21,7 +21,6 @@ def startSendingTime(slave_client):
 
 # client thread function used to receive synchronized time
 def startReceivingTime(slave_client):
-
 	while True:
 		# receive data from the server
 	    Synchronized_time = parser.parse(slave_client.recv(1024).decode())

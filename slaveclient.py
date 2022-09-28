@@ -17,7 +17,7 @@ def startSendingTime(slave_client):
             break
         try:
             slave_client.send(str(datetime.datetime.now()).encode())
-            print("Recent time sent successfully", end="\n\n")
+            print("Recent time sent successfully",end="\n\n")
             time.sleep(25)
         except:
             break
@@ -29,11 +29,10 @@ def startReceivingTime(slave_client):
     while True:
         if slave_client._closed:
             break
-   # receive data from the server
+        # receive data from the server
         try:
             Synchronized_time = parser.parse(slave_client.recv(1024).decode())
-            print("Synchronized time at the client is: " +
-                  str(Synchronized_time), end="\n\n")
+            print("Synchronized time at the client is: " + str(Synchronized_time), end="\n\n")
         except:
             break
 
@@ -61,3 +60,6 @@ def initiateSlaveClient(port=8080):
         args=(slave_client, ))
     receive_time_thread.start()
     return slave_client
+
+
+
