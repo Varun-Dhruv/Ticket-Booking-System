@@ -1,6 +1,9 @@
+import slaveclient
 import xmlrpc.client
-proxy = xmlrpc.client.ServerProxy("http://localhost:8000/") 
+proxy = xmlrpc.client.ServerProxy("http://localhost:8000/")
+
 if __name__ == '__main__':
+    
     while True:
         
         print(
