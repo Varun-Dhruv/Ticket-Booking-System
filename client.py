@@ -1,8 +1,8 @@
-import slaveclient
+#import slaveclient
 import xmlrpc.client
 proxy = xmlrpc.client.ServerProxy("http://localhost:8000/")
 if __name__ == '__main__':
-    sc = slaveclient.initiateSlaveClient(port=8080)
+    # sc = slaveclient.initiateSlaveClient(port=8080)
     while True:
 
         print(

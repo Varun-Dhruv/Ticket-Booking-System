@@ -2,7 +2,7 @@ import sys
 import threading
 import socket
 from timeit import default_timer as timer
-from dateutil import parser
+#from dateutil import parser
 import datetime
 import time
 

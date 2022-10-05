@@ -7,14 +7,14 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = socket.gethostname()
 to_port = 7777
 s.connect((host, to_port))
-my_id = "7"
-s.send(my_id.encode('utf-8'))
+cur_process_id = "7"
+s.send(cur_process_id.encode('utf-8'))
 leader="-1"
 
 def initiate_election(s):
     time.sleep(1)
-    s.send(my_id.encode('utf-8'))
-    print("token sent: " + my_id)
+    s.send(cur_process_id.encode('utf-8'))
+    print("token sent: " + cur_process_id)
     print("Election initiated")
 
 def Ring_Election_Algorithm(s):
@@ -32,22 +32,22 @@ def Ring_Election_Algorithm(s):
             initiate_election(s)
             continue
 
-        if my_id in received_token_list and "Coordinator: " not in received_token_list and "hello" not in received_token_list:
+        if cur_process_id in received_token_list and "Coordinator: " not in received_token_list and "id_rec" not in received_token_list:
             leader = max(received_token_list)
             forwarding_leader = "Coordinator: " + leader
             time.sleep(1)
             s.send(forwarding_leader.encode('utf-8'))
 
-        elif my_id not in received_token_list and "Coordinator: " not in received_token_list and "hello" not in received_token_list :
+        elif cur_process_id not in received_token_list and "Coordinator: " not in received_token_list and "id_rec" not in received_token_list :
 
             print("rec tok: " + received_token_list)
             leader = "0"
-            received_token_list = received_token_list + " " + my_id
+            received_token_list = received_token_list + " " + cur_process_id
             time.sleep(1)
             s.send(received_token_list.encode('utf-8'))
             print("adding token: " + received_token_list)
 
-        elif ("hello" in received_token_list or "Coordinator: " in received_token_list )and leader=="-1"  :
+        elif ("id_rec" in received_token_list or "Coordinator: " in received_token_list )and leader=="-1"  :
                 leader="0"
                 initiate_election(s)
 
@@ -64,7 +64,7 @@ def Ring_Election_Algorithm(s):
             else :
                 #print("coordinator mm :" + leader)
                 print(received_token_list)
-                communicate = "hello" + " from " + my_id
+                communicate = "id_rec" + cur_process_id
                 time.sleep(1)
                 s.send(communicate.encode('utf-8'))
                 continue
