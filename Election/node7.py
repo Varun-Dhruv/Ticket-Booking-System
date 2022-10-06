@@ -1,129 +1,13 @@
 import socket
 import threading
 import time
-import select
-
 from xmlrpc.server import SimpleXMLRPCServer
-import string
-import random
-
-FilmInfo = [
-    {
-        "name": "F&F",
-        "time": "3",
-        "location": "Malad"
-    }, {
-        "name": "Race",
-        "time": "6",
-        "location": "Malad"
-    }, {
-        "name": "Inception",
-        "time": "9",
-        "location": "Malad"
-    }
-]
-
-
-def getFilmInfo(time, name):
-    Filmlist = []
-    for inforFilm in FilmInfo:
-        if inforFilm["name"] == name and inforFilm["time"] == time:
-            Filmlist.append(inforFilm['location'])
-    return Filmlist
-
-
-class Film:
-    def __init__(self, Film_id, Film_name, available_seats, genre):
-        self.Film_id = Film_id
-        self.Film_name = Film_name
-        self.available_seats = available_seats
-        self.genre = genre
-
-    def reduceAMovieCopy(self):
-        if self.available_seats != 0:
-            self.available_seats -= 1
-        else:
-            self.available_seats = -1
-
-
-# Data
-Films_list = [
-    {
-        'name': 'Fast and Furious',
-        'genre': 'Thriller'
-    },
-    {
-        'name': 'Hulk',
-        'genre': 'Fiction'
-    },
-    {
-        'name': 'Avengers: End Game',
-        'genre': 'Fantasy'
-    },
-    {
-        'name': 'Lord of the Rings',
-        'genre': 'Adventure'
-    },
-    {
-        'name': 'Brahmastra',
-        'genre': 'Bollywood'
-    },
-    {
-        'name': "The Ring",
-        'genre': 'Horror'
-    }
-]
-
-
-Films = []
-for film in Films_list:
-    Films.append(
-        Film(
-            Film_id=''.join(random.choices(string.digits, k=6)), Film_name=film["name"],
-            available_seats=100,
-            genre=film["genre"]
-        )
-    )
-
-
-def view_Films():
-    table = [
-        ["Film ID", "Genre", "Seats", "Film Name"]]
-    # table.title = 'Films'
-    for Film in Films:
-        table.append(
-            [
-                Film.Film_id, Film.genre, Film.available_seats, Film.Film_name,
-
-            ]
-        )
-    return table
-
-
-def book_seat(name):
-    for film in Films:
-        if (film.Film_name == name):
-            film.reduceAMovieCopy()
-            break
-    print("out")
-    return True
-
-server = SimpleXMLRPCServer(("localhost", 8000), logRequests=True)
-server.register_function(getFilmInfo, "getFilmsInfo")
-server.register_function(view_Films, "view_Films")
-server.register_function(book_seat, "book_seat")
-try:
-    print("Starting and listening on port 8000...")
-    print("Press Ctrl + C to exit.")
-except:
-    print("Exit.")
-
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = socket.gethostname()
 to_port = 7777
 s.connect((host, to_port))
-cur_process_id = "0"
+cur_process_id = "7"
 s.send(cur_process_id.encode('utf-8'))
 leader = "-1"
 
@@ -149,6 +33,7 @@ def Ring_Election_Algorithm(s):
             leader = "0"
             initiate_election(s)
             continue
+
         print("token list is: "+received_token_list)
         if cur_process_id in received_token_list and "Coordinator: " not in received_token_list and "id_rec" not in received_token_list:
             leader = max(received_token_list)
@@ -190,7 +75,5 @@ def Ring_Election_Algorithm(s):
 
 recv_thread = threading.Thread(target=Ring_Election_Algorithm, args=(s,))
 recv_thread.start()
-
-
 recv_thread.join()
 s.close()

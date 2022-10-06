@@ -7,7 +7,7 @@ import datetime
 import time
 
 s = socket.socket()
-s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR, 1)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 host = socket.gethostname()
 port = 7777
 try:
@@ -22,6 +22,7 @@ process_list = []
 neighbor_list = []
 msg_token = ""
 
+
 def recv_message(conn):
     while True:
         try:
@@ -30,29 +31,30 @@ def recv_message(conn):
             print("received token: " + msg_token)
         except:
             continue
-  
-        if "Coordinator: " in msg_token :
-            le=msg_token.split()
-            leader=le[1]
- 
-        process_index = process_sockets_list.index(conn)
-        if len(process_sockets_list)==process_index+1 :
-            to_process=0
-        else :
-            to_process=process_index+1
 
-        try :
+        if "Coordinator: " in msg_token:
+            le = msg_token.split()
+            leader = le[1]
+
+        process_index = process_sockets_list.index(conn)
+        if len(process_sockets_list) == process_index+1:
+            to_process = 0
+        else:
+            to_process = process_index+1
+
+        try:
             process_sockets_list[to_process].send(received)
             print("sending :" + received.decode('utf-8'))
 
-        except :
-            if process_list[to_process]!=leader :
+        except:
+            if process_list[to_process] != leader:
                 process_sockets_list[to_process+1].send(received)
                 print("sending :" + received.decode('utf-8'))
             process_sockets_list[to_process].close()
             process_sockets_list.remove(process_sockets_list[to_process])
             process_list.remove(process_list[to_process])
             continue
+
 
 while True:
     try:
@@ -61,12 +63,12 @@ while True:
         recv_process_id = connection.recv(1024)
         from_to_process = recv_process_id.decode('utf-8')
         process_list.append(from_to_process)
-        print("Process: " + from_to_process)
-        start_thread = threading.Thread(target=recv_message, args=(connection,))
+        print("New node spawned: " + from_to_process)
+        start_thread = threading.Thread(
+            target=recv_message, args=(connection,))
         start_thread.start()
     except socket.error as msg:
         print("thread failed"+msg)
 
 connection.close()
 s.close()
-

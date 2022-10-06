@@ -1,13 +1,13 @@
 import socket
 import threading
 import time
-import select
+from xmlrpc.server import SimpleXMLRPCServer
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = socket.gethostname()
 to_port = 7777
 s.connect((host, to_port))
-cur_process_id = "4"
+cur_process_id = "3"
 s.send(cur_process_id.encode('utf-8'))
 leader="-1"
 

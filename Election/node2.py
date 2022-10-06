@@ -1,13 +1,13 @@
 import socket
 import threading
 import time
-import select
+from xmlrpc.server import SimpleXMLRPCServer
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 host = socket.gethostname()
 to_port = 7777
 s.connect((host, to_port))
-cur_process_id = "7"
+cur_process_id = "2"
 s.send(cur_process_id.encode('utf-8'))
 leader="-1"
 
@@ -32,6 +32,7 @@ def Ring_Election_Algorithm(s):
             initiate_election(s)
             continue
 
+        print("token list is: "+received_token_list)
         if cur_process_id in received_token_list and "Coordinator: " not in received_token_list and "id_rec" not in received_token_list:
             leader = max(received_token_list)
             forwarding_leader = "Coordinator: " + leader
