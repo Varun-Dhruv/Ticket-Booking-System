@@ -11,6 +11,8 @@ NETWORK = {
     "node_4": ("127.0.0.1", 8000),
 }
 CRS = ("127.0.0.1", 4000)
+# fileread = open("myfile.txt", "r")
+# filewrite = open("myfile.txt", "w")
 
 
 class RPCServer:
@@ -60,6 +62,22 @@ class RPCServer:
                     continue
                 timestamp = time()
                 node.request(timestamp, self.pid)
+                fileread = open("myfile.txt", "r")
+                #filewrite = open("myfile.txt", "w")
+                # file read
+                num = int(fileread.read(1))
+                print(num)
+                if num == 0:
+                    print('No more seats avaible please try another time')
+                else:
+                    num = num-1
+                    print(f'one ticket booked: tickets available are: {num}')
+                    fileread.close()
+                    filewrite = open("myfile.txt", "w")
+                    filewrite.write(str(num))
+                    filewrite.close()
+                     # write file
+
 
         if set(self.pid_node_mapping.keys()) == self.reply_set:
             self.CRS.execute_task_in_critical(self.pid)
