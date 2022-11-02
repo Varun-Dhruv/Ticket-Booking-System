@@ -56,16 +56,16 @@ class RPCServer:
                 self.execute(after_replay=True)
 
     def execute(self, after_replay=False):
-       
+
         if not after_replay:
             for rpid, node in self.pid_node_mapping.items():
                 if rpid == self.pid:
                     continue
                 try:
                     timestamp = time()
-                
+
                     node.request(timestamp, self.pid)
-                    fileread = open("myfile.txt", "r")
+                    fileread = open("ticketAmount.txt", "r")
                     #filewrite = open("myfile.txt", "w")
                     # file read
                     num = int(fileread.read(1))
@@ -74,14 +74,14 @@ class RPCServer:
                         print('No more seats avaible please try another time')
                     else:
                         num = num-1
-                        print(f'one ticket booked: tickets available are: {num}')
+                        print(
+                            f'one ticket booked: tickets available are: {num}')
                         fileread.close()
-                        filewrite = open("myfile.txt", "w")
+                        filewrite = open("ticketAmount.txt", "w")
                         filewrite.write(str(num))
                         filewrite.close()
                 except Exception as e:
-                     print('')     # write file
-
+                    print('')     # write file
 
         if set(self.pid_node_mapping.keys()) == self.reply_set:
             self.CRS.execute_task_in_critical(self.pid)
@@ -94,7 +94,7 @@ class RPCServer:
 
 
 if __name__ == "__main__":
-    try: 
+    try:
         parser = argparse.ArgumentParser()
         parser.add_argument(
             "pid", type=str, help="Enter pid (node_1, node_2, node_3,node_4)")
